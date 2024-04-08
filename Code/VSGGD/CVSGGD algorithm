@@ -1,0 +1,43 @@
+import numpy as np
+from sklearn.svm import SVC  # Import a classification model, for example, Support Vector Classifier (SVC)
+
+def generate_virtual_samples(m, T):
+    n0 = sum(1 for _, label in T if label == 0)
+    n1 = sum(1 for _, label in T if label == 1)
+    k = len(T[0][0])  # Assuming all features have the same dimensionality
+    
+    R = np.zeros((m, k))  # Initialize R with zeros
+    
+    Tv = []
+    q = 0
+    for x, y in T:
+        if y == 0:
+            for _ in range(m):
+                r = np.random.random(k)  # Generate a random column vector of dimension k
+                R += r.reshape(-1, 1)  # Add r to R column-wise
+                for p in range(m):
+                    Tv.append(R[p])  # Take the pth row as a virtual sample
+                    q += 1
+    
+    return Tv
+
+def F(T):
+    # Assuming F is a classification model, for example, Support Vector Classifier (SVC)
+    X = [x for x, _ in T]
+    y = [label for _, label in T]
+    model = SVC()  # Initialize a Support Vector Classifier
+    model.fit(X, y)  # Train the model on the data
+    return model
+
+def VSGGD(T, m):
+    Tv = generate_virtual_samples(m, T)  # Generate virtual samples from the original training set
+    T_star = T + Tv  # Generate the new training set by the addition of virtual samples
+    return T_star
+
+# Example usage:
+# T is a list of tuples where each tuple contains a feature vector and its corresponding label
+T = [((1, 2, 3), 0), ((4, 5, 6), 1), ((7, 8, 9), 0)]
+m = 2
+T_star = VSGGD(T, m)  # Generate the new training set by adding virtual samples
+f = F(T_star)  # Train a classification model on the new training set T_star
+print(f)
