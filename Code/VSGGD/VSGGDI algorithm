@@ -1,0 +1,28 @@
+import numpy as np
+
+def generate_virtual_samples(m, T):
+    n0 = sum(1 for _, label in T if label == 0)
+    n1 = sum(1 for _, label in T if label == 1)
+    k = len(T[0][0])  # Assuming all features have the same dimensionality
+    
+    R = np.zeros((m, k))  # Initialize R with zeros
+    
+    Tv = []
+    q = 0
+    for x, y in T:
+        if y == 0:
+            for _ in range(m):
+                r = np.random.random(k)  # Generate a random column vector of dimension k
+                R += r.reshape(-1, 1)  # Add r to R column-wise
+                for p in range(m):
+                    Tv.append(R[p])  # Take the pth row as a virtual sample
+                    q += 1
+    
+    return Tv
+
+# Example usage:
+# T is a list of tuples where each tuple contains a feature vector and its corresponding label
+T = [((1, 2, 3), 0), ((4, 5, 6), 1), ((7, 8, 9), 0)]
+m = 2
+virtual_samples = generate_virtual_samples(m, T)
+print(virtual_samples)
