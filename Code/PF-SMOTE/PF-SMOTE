@@ -1,0 +1,41 @@
+import numpy as np
+from sklearn.neighbors import NearestNeighbors
+
+def PF_SMOTE(minority_class, majority_class, N=100):
+    """
+    Implementing the PF-SMOTE algorithm.
+    
+    :param minority_class: NumPy array of minority class samples.
+    :param majority_class: NumPy array of majority class samples.
+    :N: Percentage of SMOTE oversampling. 100 for double, 200 for triple, etc.
+    :return: NumPy array of synthetic samples.
+    """
+    synthetic_samples = []
+    
+    num_synthetic_samples = N * minority_class.shape[0] // 100
+    nn = NearestNeighbors(n_neighbors=2).fit(minority_class)
+    
+    # Generate synthetic samples based on minority class
+    for i in range(num_synthetic_samples):
+        idx = np.random.randint(0, minority_class.shape[0])
+        _, neighbors = nn.kneighbors(minority_class[idx].reshape(1, -1))
+        nn_idx = neighbors[0][1]
+        diff = minority_class[nn_idx] - minority_class[idx]
+        
+        # Generate synthetic sample according to Eq. 2 (placeholder)
+        synthetic_sample = minority_class[idx] + np.random.rand() * diff
+        
+        synthetic_samples.append(synthetic_sample)
+    
+    # Additional steps based on majority class or feature consideration can be added here.
+    # This might involve finding local safe regions (LSR) or adjusting synthetic samples based on proximity to the majority class.
+    # For now, these steps are placeholders and should be implemented according to specific equations and logic.
+    
+    return np.array(synthetic_samples)
+
+# Example usage:
+minority_class_samples = np.array([[1, 2], [2, 3], [3, 4]])  # Example minority class data
+majority_class_samples = np.array([[5, 6], [6, 7], [7, 8]])  # Example majority class data
+synthetic_samples = PF_SMOTE(minority_class_samples, majority_class_samples, N=200)  # Generate 200% synthetic samples
+
+print(synthetic_samples)
