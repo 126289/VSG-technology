@@ -1,0 +1,1 @@
+An adaptive weighted SMOTE method called AWSMOTE. AWSMOTE applies two types of SVM-based weights to SMOTE. One weight is used in the variable space to combat the disadvantages of collinearity, while another weight is used in the sample space to purposefully select those support vectors in the minority class as neighboring points in the interpolation.
