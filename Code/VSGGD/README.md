@@ -1,0 +1,1 @@
+Virtual sample generation (VSG) method based on Gaussian distribution. First, the method determines the mean and standard error of a Gaussian distribution; then, virtual samples can be generated from this Gaussian distribution. Finally, a new training set is constructed by adding dummy samples to the original training set.
