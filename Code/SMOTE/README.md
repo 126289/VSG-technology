@@ -1,0 +1,1 @@
+A strategy is employed to balance data sets where samples are encoded as strings. The well-known Synthetic Minority Oversampling Technique (SMOTE) algorithm is applied to the string space. More precisely, data generation is achieved by an iterative method of creating artificial strings within the segment between two given samples of the training set.
